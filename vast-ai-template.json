@@ -1,0 +1,67 @@
+{
+  "template_id": "gonka-ai-node-v1",
+  "name": "Gonka AI Node (GPU ML)",
+  "description": "Автоматическое развертывание ноды Gonka AI с поддержкой GPU для ML inference",
+  "docker": {
+    "image": "nvidia/cuda:12.6.0-devel-ubuntu22.04"
+  },
+  "env": {
+    "PROVISIONING_SCRIPT": "https://raw.githubusercontent.com/yurgodo/gonka-vast/main/gonka-setup.sh",
+    "GONKA_HOST_NAME": "vastai-gonka-$(hostname -s)",
+    "GONKA_OPERATIONAL_KEY": "",
+    "NVIDIA_VISIBLE_DEVICES": "all",
+    "NVIDIA_DRIVER_CAPABILITIES": "compute,utility"
+  },
+  "ports": [
+    {
+      "container_port": 5000,
+      "host_port": 5000,
+      "protocol": "tcp",
+      "description": "Tendermint P2P"
+    },
+    {
+      "container_port": 26657,
+      "host_port": 26657,
+      "protocol": "tcp",
+      "description": "Tendermint RPC"
+    },
+    {
+      "container_port": 8000,
+      "host_port": 8000,
+      "protocol": "tcp",
+      "description": "Application Service API"
+    }
+  ],
+  "resources": {
+    "min_cpu_cores": 16,
+    "min_memory_gb": 64,
+    "min_disk_gb": 500,
+    "gpu_required": {
+      "count_min": 1,
+      "memory_min_gb": 80,
+      "compute_cap_min": "80"
+    },
+    "network_mbps_min": 100
+  },
+  "launch_mode": "ssh",
+  "volumes": [
+    {
+      "mount_path": "/opt/gonka",
+      "size_gb": 500,
+      "type": "container"
+    },
+    {
+      "mount_path": "/data",
+      "size_gb": 1000,
+      "type": "container"
+    }
+  ],
+  "metadata": {
+    "version": "1.0",
+    "author": "Gonka AI",
+    "category": "AI/ML - Compute",
+    "tags": ["gonka", "ai-compute", "gpu", "llm", "inference"],
+    "documentation_url": "https://docs.gonka.ai",
+    "support_url": "https://github.com/gonka-ai/gonka/issues"
+  }
+}
